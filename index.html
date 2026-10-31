@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BILAL KARYANA STORE</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#fff8e1}
+.head{background:#ff6f00;color:white;text-align:center;padding:18px;position:sticky;top:0;z-index:99}
+.head h1{margin:0;font-size:30px}
+.head .sub{font-size:13px;margin-top:4px;opacity:.9}
+.wrap{max-width:1100px;margin:auto;padding:12px;display:grid;grid-template-columns:2fr 1fr;gap:12px}
+@media(max-width:700px){.wrap{grid-template-columns:1fr}}
+.search{width:100%;padding:12px;border:2px solid #ff6f00;border-radius:10px;font-size:15px;margin-bottom:10px}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.cat{padding:6px 14px;background:white;border:1.5px solid #ff6f00;border-radius:20px;cursor:pointer;font-size:13px;font-weight:bold}
+.cat.active{background:#ff6f00;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.item{background:white;border-radius:12px;padding:10px;text-align:center;box-shadow:0 2px 8px #0001;border-bottom:4px solid #ff6f00}
+.item img{width:100%;height:95px;object-fit:contain}
+.iname{font-weight:bold;font-size:13px;margin:6px 0 2px;height:32px;overflow:hidden}
+.iprice{display:flex;justify-content:center;align-items:center;gap:4px;margin:4px 0}
+.iprice input{width:70px;padding:5px;border:1.5px solid #ff6f00;border-radius:6px;text-align:center;font-weight:bold;color:#ff6f00}
+.iunit{font-size:11px;color:gray}
+.btn{width:100%;padding:7px;background:#ff6f00;color:white;border:none;border-radius:20px;font-weight:bold;cursor:pointer;font-size:12px;margin-top:5px}
+.btn2{padding:3px 8px;font-size:10px;background:#222;color:white;border:none;border-radius:10px;cursor:pointer;margin:2px}
+.cart{background:white;border-radius:12px;padding:12px;position:sticky;top:85px;box-shadow:0 4px 15px #0002;height:fit-content}
+.cart h3{margin:0 0 10px;color:#ff6f00;text-align:center;border-bottom:2px dashed #ff6f00;padding-bottom:8px}
+.cart-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid #eee}
+.total{font-weight:bold;font-size:18px;color:#ff6f00;display:flex;justify-content:space-between;padding:10px 0;border-top:2px solid #ff6f00;margin-top:8px}
+.foot{background:#222;color:white;text-align:center;padding:20px;margin-top:20px;font-size:13px;line-height:1.6}
+.foot b{color:#ff9800}
+.wa{position:fixed;bottom:15px;right:15px;background:#25d366;color:white;padding:12px 18px;border-radius:30px;text-decoration:none;font-weight:bold;box-shadow:0 4px 12px #0003;z-index:100}
+</style>
+</head>
+<body>
+
+<div class="head">
+<h1>BILAL KARYANA STORE</h1>
+<div class="sub">Har Ghar Ki Zaroorat - Sasti & Mayari Cheezen | WhatsApp: 0342-6527443</div>
+</div>
+
+<div class="wrap">
+<div>
+<input class="search" id="s" onkeyup="filter()" placeholder="🔍 Search - Cheeni, Aata, Oil, Surf...">
+<div class="cats" id="cats"></div>
+<div class="grid" id="grid"></div>
+<div style="margin-top:12px;display:flex;gap:6px">
+<button class="btn" style="background:#222" onclick="addNew()">+ Naya Item Add</button>
+<button class="btn" style="background:green" onclick="saveAll()">💾 Save All</button>
+</div>
+</div>
+
+<div class="cart">
+<h3>🛒 BILL / CART</h3>
+<div id="cartList">Cart Khali Hai</div>
+<div class="total"><span>Total:</span><span>Rs. <span id="gtotal">0</span></span></div>
+<input id="cname" placeholder="Customer Name" style="width:100%;padding:10px;border:1.5px solid #ff6f00;border-radius:8px;margin-top:8px">
+<button class="btn" style="padding:12px;font-size:14px;margin-top:8px" onclick="printBill()">🧾 BILL PRINT / WHATSAPP</button>
+<button class="btn" style="background:#666;margin-top:6px" onclick="clearCart()">🗑️ Cart Clear</button>
+</div>
+</div>
+
+<div class="foot">
+<b>BILAL KARYANA STORE</b><br>
+Main Bazaar - Har Cheez Dastyab | Contact: 0342-6527443 | Home Delivery Available<br><br>
+<span style="border-top:1px solid #444;padding-top:10px;display:inline-block;margin-top:5px">
+Developed with ❤️ by <b style="color:white;font-size:15px;letter-spacing:1px">AHMAD</b><br>
+<span style="font-size:11px;color:#999">End Per Mera Naam - AHMAD</span>
+</span>
+</div>
+
+<a class="wa" href="https://wa.me/923426527443?text=Salam%20BILAL%20KARYANA%20STORE%20Order%20Dena%20Hai" target="_blank">💬 Order: 0342-6527443</a>
+
+<script>
+let products = JSON.parse(localStorage.getItem('bilal_karyana')) || [
+{n:"Super Basmati Chawal",u:"1 KG",p:320,c:"Chawal",img:"https://via.placeholder.com/150?text=CHAWAL"},
+{n:"Cheeni (Sugar)",u:"1 KG",p:145,c:"Cheeni",img:"https://via.placeholder.com/150?text=CHEENI"},
+{n:"Dalda Ghee",u:"1 KG",p:520,c:"Ghee Oil",img:"https://via.placeholder.com/150?text=GHEE"},
+{n:"Cooking Oil Sufi",u:"1 Litre",p:480,c:"Ghee Oil",img:"https://via.placeholder.com/150?text=OIL"},
+{n:"Aata (Flour)",u:"10 KG",p:1250,c:"Aata",img:"https://via.placeholder.com/150?text=AATA"},
+{n:"Daal Moong",u:"1 KG",p:280,c:"Daal",img:"https://via.placeholder.com/150?text=DAAL"},
+{n:"Surf Excel",u:"1 KG",p:380,c:"Surf",img:"https://via.placeholder.com/150?text=SURF"},
+{n:"Lifebuoy Soap",u:"1 Piece",p:95,c:"Soap",img:"https://via.placeholder.com/150?text=SOAP"},
+{n:"Pepsi 1.5L",u:"1 Bottle",p:170,c:"Cold Drinks",img:"https://via.placeholder.com/150?text=PEPSI"},
+{n:"Tea Tapal",u:"200g",p:350,c:"Chai",img:"https://via.placeholder.com/150?text=TEA"}
+];
+let cats = ["All","Aata","Chawal","Cheeni","Ghee Oil","Daal","Surf","Soap","Cold Drinks","Chai"];
+let activeCat = "All"; let cart = [];
+function renderCats(){let h=''; cats.forEach(c=>{h+=`<div class="cat ${c==activeCat?'active':''}" onclick="setCat('${c}')">${c}</div>`});document.getElementById('cats').innerHTML=h;}
+function setCat(c){activeCat=c; renderCats(); render();}
+function render(){let q=document.getElementById('s').value.toLowerCase();let h='';products.forEach((x,i)=>{if(activeCat!="All" && x.c!=activeCat) return;if(!x.n.toLowerCase().includes(q)) return;h+=`<div class="item"><img src="${x.img}"><div class="iname">${x.n}</div><div class="iunit">${x.u} | ${x.c}</div><div class="iprice">Rs.<input type="number" value="${x.p}" onchange="products[${i}].p=this.value;save()"></div><button class="btn" onclick="addCart(${i})">+ Cart Me Add</button><div><button class="btn2" onclick="editItem(${i})">✏️ Edit</button><button class="btn2" style="background:#cc0000" onclick="del(${i})">Del</button></div></div>`});document.getElementById('grid').innerHTML=h;}
+function save(){localStorage.setItem('bilal_karyana',JSON.stringify(products));}
+function saveAll(){save(); alert('✅ BILAL KARYANA STORE - All Saved! By AHMAD - 03426527443');}
+function addCart(i){let f=cart.find(c=>c.i==i);if(f){f.q++} else {cart.push({i:i,q:1})}renderCart();}
+function renderCart(){if(cart.length==0){document.getElementById('cartList').innerHTML='Cart Khali Hai';document.getElementById('gtotal').innerText='0';return}let h=''; let tot=0;cart.forEach((c,idx)=>{let p=products[c.i];let sub=p.p*c.q; tot+=sub;h+=`<div class="cart-row"><span>${p.n} x ${c.q}</span><span>Rs.${sub} <b style="cursor:pointer;color:red" onclick="remCart(${idx})">x</b></span></div>`});document.getElementById('cartList').innerHTML=h;document.getElementById('gtotal').innerText=tot;}
+function remCart(idx){cart.splice(idx,1);renderCart();}
+function clearCart(){cart=[];renderCart();}
+function printBill(){if(cart.length==0){alert('Cart Khali Hai!');return}let cname=document.getElementById('cname').value||'Customer';let tot=document.getElementById('gtotal').innerText;let msg=`*BILAL KARYANA STORE*%0A*Bill - ${cname}*%0A------------------%0A`;cart.forEach(c=>{let p=products[c.i];msg+=`${p.n} (${p.u}) x ${c.q} = Rs.${p.p*c.q}%0A`;});msg+=`------------------%0A*Total: Rs.${tot}*%0A%0AThank you!%0ADeveloped by AHMAD`;window.open(`https://wa.me/923426527443?text=${msg}`,'_blank');}
+function del(i){if(confirm('Delete?')){products.splice(i,1);render();save();}}
+function editItem(i){let n=prompt('Name:',products[i].n); if(n) products[i].n=n;let u=prompt('Unit:',products[i].u); if(u) products[i].u=u;let p=prompt('Price:',products[i].p); if(p) products[i].p=p;let c=prompt('Category:',products[i].c); if(c){products[i].c=c; if(!cats.includes(c)) cats.push(c)}renderCats();render();save();}
+function addNew(){let n=prompt('Item Name:'); if(!n) return;let u=prompt('Unit:'); let p=prompt('Price Rs.?'); let c=prompt('Category:');if(p){products.push({n,u:u||'1 PC',p:parseInt(p),c:c||'General',img:`https://via.placeholder.com/150?text=${n}`}); if(c && !cats.includes(c)) cats.push(c); renderCats();render();save();}}
+function filter(){render();}
+render
